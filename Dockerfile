@@ -9,4 +9,5 @@ COPY . .
 
 EXPOSE 5000
 
+# enabled debug mode for auto reload
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--debug"]

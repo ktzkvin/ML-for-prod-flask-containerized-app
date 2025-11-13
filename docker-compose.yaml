@@ -3,15 +3,17 @@ services:
     build: .
     ports:
       - "5000:5000"
+    # mounted local folder so Flask reloads automatically when I edit files
     volumes:
       - .:/app
+    # enabled debug mode for auto reload
     environment:
       - FLASK_DEBUG=1
     depends_on:
       - mongo
 
   mongo:
-    image: "mongo:8"
+    image: "mongo:latest"
     volumes:
       - mongo_data:/data/db
 
