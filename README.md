@@ -1,12 +1,8 @@
-# CI-with-github
+# Flask MongoDB App
 
-run the code:
+run with docker:
 
-    pip install -r requirements.txt
-    python app.py
+    docker compose build
+    docker compose up
 
-the app runs on http://127.0.0.1:5000
-
-test the app:
-
-python -m unittest
+the app runs on http://localhost:5000
