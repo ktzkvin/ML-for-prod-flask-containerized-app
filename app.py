@@ -24,20 +24,13 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     col = MongoClient("mongodb://mongo:27017")["testdb"]["restaurants"]
-    path = os.path.join(os.path.dirname(__file__), "data", "restaurant.json")
+    path = "data/restaurant.json"
 
-    docs = []
-    for line in open(path, encoding="utf-8"):
-        d = json.loads(line)
-        d.pop("_id", None)
-        docs.append(d)
-
+    docs = [json.loads(line) for line in open(path)]
     col.drop()
     col.insert_many(docs)
 
-    restaurants = list(col.find({}, {"_id": 0}))
-    return render_template("home.html", restaurants=restaurants)
-
+    return render_template("home.html", restaurants=list(col.find()))
 
 ##########################################################################
 ## Main
