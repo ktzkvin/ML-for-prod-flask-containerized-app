@@ -1,4 +1,3 @@
-
 """
 simple python flask application
 """
@@ -8,12 +7,9 @@ simple python flask application
 ##########################################################################
 
 import os
-
-from flask import Flask
-from flask import request
-from flask import render_template
-from flask import url_for
-from flask.json import jsonify
+import json
+from flask import Flask, render_template
+from pymongo import MongoClient
 
 ##########################################################################
 ## Application Setup
@@ -27,43 +23,21 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    col = MongoClient("mongodb://mongo:27017")["testdb"]["restaurants"]
+    path = os.path.join(os.path.dirname(__file__), "data", "restaurant.json")
 
-@app.route("/api/hello")
-def hello():
-    """
-    Return a hello message
-    """
-    return jsonify({"hello": "world"})
+    docs = []
+    for line in open(path, encoding="utf-8"):
+        d = json.loads(line)
+        d.pop("_id", None)
+        docs.append(d)
 
-@app.route("/api/hello/<name>")
-def hello_name(name):
-    """
-    Return a hello message with name
-    """
-    return jsonify({"hello": name})
+    col.drop()
+    col.insert_many(docs)
 
-@app.route("/api/whoami")
-def whoami():
-    """
-    Return a JSON object with the name, ip, and user agent
-    """
-    return jsonify(
-        name=request.remote_addr,
-        ip=request.remote_addr,
-        useragent=request.user_agent.string
-    )
+    restaurants = list(col.find({}, {"_id": 0}))
+    return render_template("home.html", restaurants=restaurants)
 
-@app.route("/api/whoami/<name>")
-def whoami_name(name):
-    """
-    Return a JSON object with the name, ip, and user agent
-    """
-    return jsonify(
-        name=name,
-        ip=request.remote_addr,
-        useragent=request.user_agent.string
-    )
 
 ##########################################################################
 ## Main
