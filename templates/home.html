@@ -1,45 +1,15 @@
-<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8" />
     <title>Restaurants</title>
-    <style>
-      body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
-      table { border-collapse: collapse; width: 100%; }
-      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-      th { background: #f3f3f3; }
-    </style>
   </head>
   <body>
     <h1>Restaurants</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>Outcode</th>
-          <th>Postcode</th>
-          <th>Type</th>
-          <th>Rating</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in restaurants %}
-        <tr>
-          <td>{{ r.get('name','') }}</td>
-          <td>{{ r.get('address','') }}</td>
-          <td>{{ r.get('address line 2','') }}</td>
-          <td>{{ r.get('outcode','') }}</td>
-          <td>{{ r.get('postcode','') }}</td>
-          <td>{{ r.get('type_of_food','') }}</td>
-          <td>{{ r.get('rating','') }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% if not restaurants %}
-      <p>No data yet.</p>
-    {% endif %}
+
+    {% for r in restaurants %}
+      <p>
+        {{ r.name }} - {{ r.address }} - {{ r['address line 2'] }} - {{ r.outcode }} {{ r.postcode }} - {{ r.type_of_food }} - {{ r.rating }}
+      </p>
+    {% endfor %}
+
   </body>
 </html>
